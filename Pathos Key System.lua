@@ -813,14 +813,14 @@ LootlabsButton.MouseButton1Click:Connect(function()
 end)
 
 LinkvertiseButton.MouseButton1Click:Connect(function()
-	createNotification("Linkvertise is disabled", "info", 3)
-	-- if setclipboard then
-	-- 	createNotification("Linkvertise link copied to clipboard!", "info", 3)
-	-- 	setclipboard("https://ads.luarmor.net/get_key?for=Pathos_FIAS_Linkvertise-aietlPpLMrMu")
-	-- else
-	-- 	createNotification("Could not set clipboard! copy from textbox", "info", 3)
-	-- 	KeyTextBox.Text = "https://shorturl.at/aPcwd"
-	-- end
+	--createNotification("Linkvertise is disabled", "info", 3)
+	if setclipboard then
+		createNotification("Linkvertise link copied to clipboard!", "info", 3)
+		setclipboard("https://ads.luarmor.net/get_key?for=Pathos_FIAS_Linkvertise-aietlPpLMrMu")
+	else
+		createNotification("Could not set clipboard! copy from textbox", "info", 3)
+		KeyTextBox.Text = "https://shorturl.at/aPcwd"
+	end
 	closePopup()
 end)
 
