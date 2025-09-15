@@ -420,7 +420,7 @@ LootlabsButton.Size = UDim2.new(1, -40, 0, 40)
 LootlabsButton.Position = UDim2.new(0, 20, 0, 125)
 LootlabsButton.BackgroundColor3 = Color3.fromRGB(60, 60, 65)
 LootlabsButton.BorderSizePixel = 0
-LootlabsButton.Text = "Workink"
+LootlabsButton.Text = "Lockr.So"
 LootlabsButton.TextColor3 = Color3.fromRGB(200, 200, 200)
 LootlabsButton.TextSize = 14
 LootlabsButton.Font = Enum.Font.GothamBold
@@ -802,11 +802,11 @@ end)
 LootlabsButton.MouseButton1Click:Connect(function()
 		
 	if setclipboard then
-		createNotification("Workink link copied to clipboard!", "info", 3)
-		setclipboard("https://ads.luarmor.net/get_key?for=Pathos_FIAS_WorkInk-UDbVlYkJiaFV")
+		createNotification("Lockr.so link copied to clipboard!", "info", 3)
+		setclipboard("https://ads.luarmor.net/get_key?for=Pathos-xcIbIqoNOart")
 	else
 		createNotification("Could not set clipboard! copy from textbox", "info", 3)
-		KeyTextBox.Text = "https://shorturl.at/R2Shb"
+		KeyTextBox.Text = "https://shorturl.at/VNAFX"
 	end
 
 	closePopup()
