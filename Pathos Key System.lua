@@ -44,6 +44,64 @@ script_key = script_key or ( isfile(KeyFile) and readfile(KeyFile) ) or nil
 
 local DARK_RED_ACCENT = Color3.fromRGB(120, 20, 20)
 
+local function sanitizeKey(input)
+    if not input or input == "" then
+        return ""
+    end
+    
+    local sanitized = input
+    
+    sanitized = string.gsub(sanitized, "^%s*(.-)%s*$", "%1")
+    sanitized = string.gsub(sanitized, "[\194\173]", "")
+    sanitized = string.gsub(sanitized, "[\226\128\139]", "")
+    sanitized = string.gsub(sanitized, "[\226\128\140]", "")
+    sanitized = string.gsub(sanitized, "[\226\128\141]", "")
+    sanitized = string.gsub(sanitized, "[\194\160]", "")
+    sanitized = string.gsub(sanitized, "[\239\187\191]", "")
+    
+    sanitized = string.gsub(sanitized, "[\r\n]", "")
+    
+    sanitized = string.gsub(sanitized, "[^%w%-_]", "")
+    
+    return sanitized
+end
+
+--[[
+local function debugKeyInput(input)
+    if not input then return "nil input" end
+    
+    local debugInfo = "Key Debug Info:\n"
+    debugInfo = debugInfo .. "Length: " .. #input .. "\n"
+    debugInfo = debugInfo .. "Raw: '" .. input .. "'\n"
+    debugInfo = debugInfo .. "Bytes: "
+    
+    for i = 1, #input do
+        debugInfo = debugInfo .. string.byte(input, i) .. " "
+    end
+    
+    return debugInfo
+end
+]]
+
+local function validateKeyFormat(key)
+    if not key or key == "" then
+        return false, "Key is empty"
+    end
+    
+    local expectedPattern = "^[%w%-_]+$"
+    if not string.match(key, expectedPattern) then
+        return false, "Key contains invalid characters"
+    end
+    
+    if #key < 10 then
+        return false, "Key too short (minimum 10 characters)"
+    elseif #key > 100 then
+        return false, "Key too long (maximum 100 characters)"
+    end
+    
+    return true, "Valid format"
+end
+
 getgenv().PathosLoader = Instance.new("ScreenGui")
 PathosLoader.Name = "PathosLoaderPremium"
 PathosLoader.ResetOnSpawn = false
@@ -70,8 +128,8 @@ BackgroundFrame.Parent = PathosLoader
 
 local GlowFrame = Instance.new("Frame")
 GlowFrame.Name = "GlowFrame"
-GlowFrame.Size = UDim2.new(0, 408, 0, 328)
-GlowFrame.Position = UDim2.new(0.5, -204, 0.5, -164)
+GlowFrame.Size = UDim2.new(0, 408, 0, 358) 
+GlowFrame.Position = UDim2.new(0.5, -204, 0.5, -179)
 GlowFrame.AnchorPoint = Vector2.new(0, 0)
 GlowFrame.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
 GlowFrame.BackgroundTransparency = 0.92
@@ -85,8 +143,8 @@ GlowCorner.Parent = GlowFrame
 
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 400, 0, 320)
-MainFrame.Position = UDim2.new(0.5, -200, 0.5, -160)
+MainFrame.Size = UDim2.new(0, 400, 0, 350)
+MainFrame.Position = UDim2.new(0.5, -200, 0.5, -175)
 MainFrame.AnchorPoint = Vector2.new(0, 0)
 MainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 52)
 MainFrame.BorderSizePixel = 0
@@ -189,7 +247,7 @@ DescriptionText.Name = "DescriptionText"
 DescriptionText.Size = UDim2.new(1, -40, 0, 40)
 DescriptionText.Position = UDim2.new(0, 20, 0, 70)
 DescriptionText.BackgroundTransparency = 1
-DescriptionText.Text = "Please enter your key to access scripts"
+DescriptionText.Text = "Enter your key below"
 DescriptionText.TextColor3 = Color3.fromRGB(180, 180, 180)
 DescriptionText.TextSize = 14
 DescriptionText.TextXAlignment = Enum.TextXAlignment.Center
@@ -233,10 +291,27 @@ KeyTextBox.ClearTextOnFocus = false
 KeyTextBox.ZIndex = 4
 KeyTextBox.Parent = KeyInputFrame
 
+local PasteCleanButton = Instance.new("TextButton")
+PasteCleanButton.Name = "PasteCleanButton"
+PasteCleanButton.Size = UDim2.new(1, -40, 0, 30)
+PasteCleanButton.Position = UDim2.new(0, 20, 0, 180)
+PasteCleanButton.BackgroundColor3 = Color3.fromRGB(80, 80, 85)
+PasteCleanButton.BorderSizePixel = 0
+PasteCleanButton.Text = "📋 Paste & Auto-Clean Key"
+PasteCleanButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+PasteCleanButton.TextSize = 12
+PasteCleanButton.Font = Enum.Font.GothamBold
+PasteCleanButton.ZIndex = 4
+PasteCleanButton.Parent = MainFrame
+
+local PasteCleanCorner = Instance.new("UICorner")
+PasteCleanCorner.CornerRadius = UDim.new(0, 8)
+PasteCleanCorner.Parent = PasteCleanButton
+
 local ButtonContainer = Instance.new("Frame")
 ButtonContainer.Name = "ButtonContainer"
 ButtonContainer.Size = UDim2.new(1, -40, 0, 40)
-ButtonContainer.Position = UDim2.new(0, 20, 0, 190)
+ButtonContainer.Position = UDim2.new(0, 20, 0, 220)
 ButtonContainer.BackgroundTransparency = 1
 ButtonContainer.ZIndex = 3
 ButtonContainer.Parent = MainFrame
@@ -308,7 +383,7 @@ NotificationContainer.Parent = PathosLoader
 local StatusLabel = Instance.new("TextLabel")
 StatusLabel.Name = "StatusLabel"
 StatusLabel.Size = UDim2.new(1, -40, 0, 25)
-StatusLabel.Position = UDim2.new(0, 20, 0, 250)
+StatusLabel.Position = UDim2.new(0, 20, 0, 280)
 StatusLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 55)
 StatusLabel.BorderSizePixel = 0
 StatusLabel.Text = ""
@@ -454,6 +529,7 @@ setupHoverEffect(GetKeyButton, Color3.fromRGB(60, 60, 65), Color3.fromRGB(80, 80
 setupHoverEffect(CheckKeyButton, Color3.fromRGB(220, 50, 50), Color3.fromRGB(240, 70, 70))
 setupHoverEffect(LinkvertiseButton, Color3.fromRGB(220, 50, 50), Color3.fromRGB(240, 70, 70))
 setupHoverEffect(LootlabsButton, Color3.fromRGB(60, 60, 65), Color3.fromRGB(80, 80, 85))
+setupHoverEffect(PasteCleanButton, Color3.fromRGB(80, 80, 85), Color3.fromRGB(100, 100, 105))
 
 CloseButton.MouseEnter:Connect(function()
 	CreateTween(CloseButton, {TextColor3 = Color3.fromRGB(255, 100, 100)}, 0.2):Play()
@@ -485,6 +561,14 @@ end)
 
 KeyTextBox.FocusLost:Connect(function()
 	CreateTween(KeyInputStroke, {Color = DARK_RED_ACCENT}, 0.3):Play()
+	
+	local currentText = KeyTextBox.Text
+	local sanitizedText = sanitizeKey(currentText)
+	
+	if currentText ~= sanitizedText and sanitizedText ~= "" then
+		KeyTextBox.Text = sanitizedText
+		createNotification("Key auto-cleaned for mobile compatibility", "info", 2)
+	end
 end)
 
 local function showStatus(message, color, duration)
@@ -683,8 +767,8 @@ end
 task.spawn(function()
 	while GlowFrame and GlowFrame.Parent do
 		CreateTween(GlowFrame, {
-			Size = UDim2.new(0, 415, 0, 335),
-			Position = UDim2.new(0.5, -207.5, 0.5, -167.5),
+			Size = UDim2.new(0, 415, 0, 365),
+			Position = UDim2.new(0.5, -207.5, 0.5, -182.5),
 			BackgroundTransparency = 0.95
 		}, 2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut):Play()
 
@@ -693,8 +777,8 @@ task.spawn(function()
 		if not (GlowFrame and GlowFrame.Parent) then break end
 
 		CreateTween(GlowFrame, {
-			Size = UDim2.new(0, 408, 0, 328),
-			Position = UDim2.new(0.5, -204, 0.5, -164),
+			Size = UDim2.new(0, 408, 0, 358),
+			Position = UDim2.new(0.5, -204, 0.5, -179),
 			BackgroundTransparency = 0.92
 		}, 2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut):Play()
 
@@ -776,7 +860,7 @@ local function CheckKey(Key)
 				KEY_INCORRECT = "Key is incorrect",
 				KEY_INVALID = "Key is invalid",
 			}
-			createNotification("Key Failure: " .. (messages[status.code] or "Unknown error"), "info", 3)
+			createNotification("Key Failure: " .. (messages[status.code] or "Unknown error"), "error", 5)
 		else
 			game:GetService("Players").LocalPlayer:Kick("Key Failure: " .. status.message .. " Code: " .. status.code)
 		end
@@ -799,8 +883,28 @@ PopupBackground.MouseButton1Click:Connect(function()
 	closePopup()
 end)
 
+PasteCleanButton.MouseButton1Click:Connect(function()
+	if getclipboard then
+		local success, clipboardText = pcall(getclipboard)
+		if success and clipboardText and clipboardText ~= "" then
+			local cleanedKey = sanitizeKey(clipboardText)
+			if cleanedKey ~= "" then
+				KeyTextBox.Text = cleanedKey
+				createNotification("Key pasted and cleaned successfully!", "success", 3)
+				
+			else
+				createNotification("Clipboard contains invalid key format!", "warning", 4)
+			end
+		else
+			createNotification("Clipboard is empty or inaccessible!", "warning", 3)
+		end
+	else
+		createNotification("Clipboard not supported. Please type/paste your key manually in the text box above.", "info", 5)
+		KeyTextBox:CaptureFocus()
+	end
+end)
+
 LootlabsButton.MouseButton1Click:Connect(function()
-		
 	if setclipboard then
 		createNotification("Lockr.so link copied to clipboard!", "info", 3)
 		setclipboard("https://ads.luarmor.net/get_key?for=Pathos-xcIbIqoNOart")
@@ -808,12 +912,10 @@ LootlabsButton.MouseButton1Click:Connect(function()
 		createNotification("Could not set clipboard! copy from textbox", "info", 3)
 		KeyTextBox.Text = "https://shorturl.at/VNAFX"
 	end
-
 	closePopup()
 end)
 
 LinkvertiseButton.MouseButton1Click:Connect(function()
-	--createNotification("Linkvertise is disabled", "info", 3)
 	if setclipboard then
 		createNotification("Linkvertise link copied to clipboard!", "info", 3)
 		setclipboard("https://ads.luarmor.net/get_key?for=Pathos_FIAS_Linkvertise-aietlPpLMrMu")
@@ -826,14 +928,37 @@ end)
 
 CheckKeyButton.MouseButton1Click:Connect(function()
 	local keyInput = KeyTextBox.Text
-
+	
+	
 	if keyInput == "" then
 		createNotification("Please enter a key first!", "warning", 3)
 		shakeUI()
 		return
 	end
+	
+	local sanitizedKey = sanitizeKey(keyInput)
+	
+	
+	if sanitizedKey == "" then
+		createNotification("Invalid key format! Please try copying the key again.", "warning", 4)
+		shakeUI()
+		return
+	end
+	
+	local isValid, errorMsg = validateKeyFormat(sanitizedKey)
+	if not isValid then
+		createNotification("Key Error: " .. errorMsg, "warning", 4)
+		shakeUI()
+		return
+	end
+	
+	if keyInput ~= sanitizedKey then
+		KeyTextBox.Text = sanitizedKey
+		createNotification("Key cleaned before validation", "info", 2)
+	end
+	
 	createNotification("Validating your key...", "info", 2)
-	CheckKey(keyInput)
+	CheckKey(sanitizedKey)
 end)
 
 DiscordSupportButton.MouseButton1Click:Connect(function()
@@ -869,13 +994,13 @@ GlowFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 GlowFrame.BackgroundTransparency = 1
 
 CreateTween(MainFrame, {
-	Size = UDim2.new(0, 400, 0, 320),
-	Position = UDim2.new(0.5, -200, 0.5, -160)
+	Size = UDim2.new(0, 400, 0, 350),
+	Position = UDim2.new(0.5, -200, 0.5, -175)
 }, 0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
 
 CreateTween(GlowFrame, {
-	Size = UDim2.new(0, 408, 0, 328),
-	Position = UDim2.new(0.5, -204, 0.5, -164),
+	Size = UDim2.new(0, 408, 0, 358),
+	Position = UDim2.new(0.5, -204, 0.5, -179),
 	BackgroundTransparency = 0.92
 }, 0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
 
@@ -886,5 +1011,6 @@ game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(State)
 end)
 
 if script_key then
+	createNotification("Found saved key, validating...", "info", 2)
 	CheckKey()
 end
