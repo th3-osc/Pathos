@@ -765,7 +765,7 @@ local function closeUI()
 end
 
 local function CheckKey(Key)
-	local status = API.check_key(script_key or Key) do
+	local status = API.check_key(Key or script_key) do
 		if status.code == "KEY_VALID" then
 			script_key = script_key or Key;
 			writefile("Pathos/Keys/" .. KeyName, script_key)
