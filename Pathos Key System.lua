@@ -34,7 +34,7 @@ local KeyName = (function()
         end
 	end
 end)()
-
+print(KeyName, PlaceName)
 if not KeyName then
 	error("Game not supported by Pathos.")
 end
