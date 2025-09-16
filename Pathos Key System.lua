@@ -40,7 +40,7 @@ if not KeyName then
 end
 
 local function CheckKey(key)
-	local script_key = script_key or key
+	script_key = script_key or key
 	local status = API.check_key(script_key) do
 		if status.code == "KEY_VALID" then
 			script_key = script_key;
