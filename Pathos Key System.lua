@@ -39,87 +39,97 @@ if not KeyName then
 	error("Game not supported by Pathos.")
 end
 
-makefolder("Pathos/Keys")
-local KeyFile = "Pathos/Keys/" .. KeyName
-script_key = script_key or ( isfile(KeyFile) and readfile(KeyFile) ) or nil
+-- makefolder("Pathos/Keys")
+-- local KeyFile = "Pathos/Keys/" .. KeyName
+-- script_key = script_key or ( isfile(KeyFile) and readfile(KeyFile) ) or nil
 
 local DARK_RED_ACCENT = Color3.fromRGB(120, 20, 20)
 
-getgenv().PathosLoader = Instance.new("ScreenGui")
-PathosLoader.Name = "PathosLoaderPremium"
-PathosLoader.ResetOnSpawn = false
-PathosLoader.IgnoreGuiInset = true
-PathosLoader.ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets
-PathosLoader.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-PathosLoader.DisplayOrder = 999
-PathosLoader.Parent = game:GetService("CoreGui")
+getgenv().PathosLoader = Instance.new("ScreenGui") do
+	PathosLoader.Name = "PathosLoaderPremium"
+	PathosLoader.ResetOnSpawn = false
+	PathosLoader.IgnoreGuiInset = true
+	PathosLoader.ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets
+	PathosLoader.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	PathosLoader.DisplayOrder = 999
+	PathosLoader.Parent = game:GetService("CoreGui")
+end
 
-local BlurEffect = Instance.new("BlurEffect")
-BlurEffect.Name = "PathosBlur"
-BlurEffect.Size = 24
-BlurEffect.Parent = game:GetService("Lighting")
+local BlurEffect = Instance.new("BlurEffect") do
+	BlurEffect.Name = "PathosBlur"
+	BlurEffect.Size = 24
+	BlurEffect.Parent = game:GetService("Lighting")
+end
 
-local BackgroundFrame = Instance.new("Frame")
-BackgroundFrame.Name = "BackgroundFrame"
-BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
-BackgroundFrame.Position = UDim2.new(0, 0, 0, 0)
-BackgroundFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-BackgroundFrame.BackgroundTransparency = 0.3
-BackgroundFrame.BorderSizePixel = 0
-BackgroundFrame.ZIndex = 1
-BackgroundFrame.Parent = PathosLoader
+local BackgroundFrame = Instance.new("Frame") do
+	BackgroundFrame.Name = "BackgroundFrame"
+	BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+	BackgroundFrame.Position = UDim2.new(0, 0, 0, 0)
+	BackgroundFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	BackgroundFrame.BackgroundTransparency = 0.3
+	BackgroundFrame.BorderSizePixel = 0
+	BackgroundFrame.ZIndex = 1
+	BackgroundFrame.Parent = PathosLoader
+end
 
-local GlowFrame = Instance.new("Frame")
-GlowFrame.Name = "GlowFrame"
-GlowFrame.Size = UDim2.new(0, 408, 0, 328)
-GlowFrame.Position = UDim2.new(0.5, -204, 0.5, -164)
-GlowFrame.AnchorPoint = Vector2.new(0, 0)
-GlowFrame.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
-GlowFrame.BackgroundTransparency = 0.92
-GlowFrame.BorderSizePixel = 0
-GlowFrame.ZIndex = 1
-GlowFrame.Parent = PathosLoader
+local GlowFrame = Instance.new("Frame") do
+	GlowFrame.Name = "GlowFrame"
+	GlowFrame.Size = UDim2.new(0, 408, 0, 328)
+	GlowFrame.Position = UDim2.new(0.5, -204, 0.5, -164)
+	GlowFrame.AnchorPoint = Vector2.new(0, 0)
+	GlowFrame.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+	GlowFrame.BackgroundTransparency = 0.92
+	GlowFrame.BorderSizePixel = 0
+	GlowFrame.ZIndex = 1
+	GlowFrame.Parent = PathosLoader
+end
 
-local GlowCorner = Instance.new("UICorner")
-GlowCorner.CornerRadius = UDim.new(0, 15)
-GlowCorner.Parent = GlowFrame
+local GlowCorner = Instance.new("UICorner") do
+	GlowCorner.CornerRadius = UDim.new(0, 15)
+	GlowCorner.Parent = GlowFrame
+end
 
-local MainFrame = Instance.new("Frame")
-MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 400, 0, 320)
-MainFrame.Position = UDim2.new(0.5, -200, 0.5, -160)
-MainFrame.AnchorPoint = Vector2.new(0, 0)
-MainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 52)
-MainFrame.BorderSizePixel = 0
-MainFrame.ZIndex = 2
-MainFrame.Parent = PathosLoader
+local MainFrame = Instance.new("Frame") do
+	MainFrame.Name = "MainFrame"
+	MainFrame.Size = UDim2.new(0, 400, 0, 320)
+	MainFrame.Position = UDim2.new(0.5, -200, 0.5, -160)
+	MainFrame.AnchorPoint = Vector2.new(0, 0)
+	MainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 52)
+	MainFrame.BorderSizePixel = 0
+	MainFrame.ZIndex = 2
+	MainFrame.Parent = PathosLoader
+end
 
-local MainGradient = Instance.new("UIGradient")
-MainGradient.Color = ColorSequence.new{
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 50, 58)),
-	ColorSequenceKeypoint.new(0.5, Color3.fromRGB(40, 40, 45)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(35, 35, 40))
-}
-MainGradient.Rotation = 90
-MainGradient.Parent = MainFrame
+local MainGradient = Instance.new("UIGradient") do
+	MainGradient.Color = ColorSequence.new{
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 50, 58)),
+		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(40, 40, 45)),
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(35, 35, 40))
+	}
+	MainGradient.Rotation = 90
+	MainGradient.Parent = MainFrame
+end
 
-local MainCorner = Instance.new("UICorner")
-MainCorner.CornerRadius = UDim.new(0, 12)
-MainCorner.Parent = MainFrame
+local MainCorner = Instance.new("UICorner") do
+	MainCorner.CornerRadius = UDim.new(0, 12)
+	MainCorner.Parent = MainFrame
+end
 
-local MainStroke = Instance.new("UIStroke")
-MainStroke.Color = DARK_RED_ACCENT
-MainStroke.Thickness = 2
-MainStroke.Parent = MainFrame
+local MainStroke = Instance.new("UIStroke") do
+	MainStroke.Color = DARK_RED_ACCENT
+	MainStroke.Thickness = 2
+	MainStroke.Parent = MainFrame
+end
 
-local TitleBar = Instance.new("Frame")
-TitleBar.Name = "TitleBar"
-TitleBar.Size = UDim2.new(1, 0, 0, 50)
-TitleBar.Position = UDim2.new(0, 0, 0, 0)
-TitleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 58)
-TitleBar.BorderSizePixel = 0
-TitleBar.ZIndex = 3
-TitleBar.Parent = MainFrame
+local TitleBar = Instance.new("Frame") do
+	TitleBar.Name = "TitleBar"
+	TitleBar.Size = UDim2.new(1, 0, 0, 50)
+	TitleBar.Position = UDim2.new(0, 0, 0, 0)
+	TitleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 58)
+	TitleBar.BorderSizePixel = 0
+	TitleBar.ZIndex = 3
+	TitleBar.Parent = MainFrame
+end
 
 local TitleGradient = Instance.new("UIGradient")
 TitleGradient.Color = ColorSequence.new{
@@ -159,45 +169,48 @@ PathosLogo.BackgroundTransparency = 1
 PathosLogo.ZIndex = 4
 PathosLogo.Parent = TitleBar
 
-local TitleText = Instance.new("TextLabel")
-TitleText.Name = "TitleText"
-TitleText.Size = UDim2.new(1, -100, 1, 0)
-TitleText.Position = UDim2.new(0, 50, 0, 0)
-TitleText.BackgroundTransparency = 1
-TitleText.Text = "PATHOS LOADER"
-TitleText.TextColor3 = Color3.fromRGB(220, 50, 50)
-TitleText.TextSize = 18
-TitleText.TextXAlignment = Enum.TextXAlignment.Left
-TitleText.TextYAlignment = Enum.TextYAlignment.Center
-TitleText.Font = Enum.Font.GothamBold
-TitleText.ZIndex = 4
-TitleText.Parent = TitleBar
+local TitleText = Instance.new("TextLabel") do
+	TitleText.Name = "TitleText"
+	TitleText.Size = UDim2.new(1, -100, 1, 0)
+	TitleText.Position = UDim2.new(0, 50, 0, 0)
+	TitleText.BackgroundTransparency = 1
+	TitleText.Text = "PATHOS LOADER"
+	TitleText.TextColor3 = Color3.fromRGB(220, 50, 50)
+	TitleText.TextSize = 18
+	TitleText.TextXAlignment = Enum.TextXAlignment.Left
+	TitleText.TextYAlignment = Enum.TextYAlignment.Center
+	TitleText.Font = Enum.Font.GothamBold
+	TitleText.ZIndex = 4
+	TitleText.Parent = TitleBar
+end
 
-local CloseButton = Instance.new("TextButton")
-CloseButton.Name = "CloseButton"
-CloseButton.Size = UDim2.new(0, 30, 0, 30)
-CloseButton.Position = UDim2.new(1, -40, 0.5, -15)
-CloseButton.BackgroundTransparency = 1
-CloseButton.Text = "×"
-CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
-CloseButton.TextSize = 20
-CloseButton.Font = Enum.Font.GothamBold
-CloseButton.ZIndex = 4
-CloseButton.Parent = TitleBar
+local CloseButton = Instance.new("TextButton") do
+	CloseButton.Name = "CloseButton"
+	CloseButton.Size = UDim2.new(0, 30, 0, 30)
+	CloseButton.Position = UDim2.new(1, -40, 0.5, -15)
+	CloseButton.BackgroundTransparency = 1
+	CloseButton.Text = "×"
+	CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+	CloseButton.TextSize = 20
+	CloseButton.Font = Enum.Font.GothamBold
+	CloseButton.ZIndex = 4
+	CloseButton.Parent = TitleBar
+end
 
-local DescriptionText = Instance.new("TextLabel")
-DescriptionText.Name = "DescriptionText"
-DescriptionText.Size = UDim2.new(1, -40, 0, 40)
-DescriptionText.Position = UDim2.new(0, 20, 0, 70)
-DescriptionText.BackgroundTransparency = 1
-DescriptionText.Text = "Please enter your key to access scripts"
-DescriptionText.TextColor3 = Color3.fromRGB(180, 180, 180)
-DescriptionText.TextSize = 14
-DescriptionText.TextXAlignment = Enum.TextXAlignment.Center
-DescriptionText.TextYAlignment = Enum.TextYAlignment.Center
-DescriptionText.Font = Enum.Font.Gotham
-DescriptionText.ZIndex = 3
-DescriptionText.Parent = MainFrame
+local DescriptionText = Instance.new("TextLabel") do
+	DescriptionText.Name = "DescriptionText"
+	DescriptionText.Size = UDim2.new(1, -40, 0, 40)
+	DescriptionText.Position = UDim2.new(0, 20, 0, 70)
+	DescriptionText.BackgroundTransparency = 1
+	DescriptionText.Text = "Please enter your key to access scripts"
+	DescriptionText.TextColor3 = Color3.fromRGB(180, 180, 180)
+	DescriptionText.TextSize = 14
+	DescriptionText.TextXAlignment = Enum.TextXAlignment.Center
+	DescriptionText.TextYAlignment = Enum.TextYAlignment.Center
+	DescriptionText.Font = Enum.Font.Gotham
+	DescriptionText.ZIndex = 3
+	DescriptionText.Parent = MainFrame
+end
 
 local KeyInputFrame = Instance.new("Frame")
 KeyInputFrame.Name = "KeyInputFrame"
@@ -421,7 +434,7 @@ LootlabsButton.Size = UDim2.new(1, -40, 0, 40)
 LootlabsButton.Position = UDim2.new(0, 20, 0, 125)
 LootlabsButton.BackgroundColor3 = Color3.fromRGB(60, 60, 65)
 LootlabsButton.BorderSizePixel = 0
-LootlabsButton.Text = "Lockr.So"
+LootlabsButton.Text = "Lootlabs"
 LootlabsButton.TextColor3 = Color3.fromRGB(200, 200, 200)
 LootlabsButton.TextSize = 14
 LootlabsButton.Font = Enum.Font.GothamBold
@@ -765,9 +778,10 @@ local function closeUI()
 end
 
 local function CheckKey(Key)
-	local status = API.check_key(Key or script_key) do
+	script_key = Key or script_key
+	local status = API.check_key(script_key) do
 		if status.code == "KEY_VALID" then
-			script_key = script_key or Key;
+			script_key = script_key;
 			writefile("Pathos/Keys/" .. KeyName, script_key)
 			closeUI()
 			API.load_script()
@@ -783,6 +797,18 @@ local function CheckKey(Key)
 		end
 	end
 end
+
+CheckKeyButton.MouseButton1Click:Connect(function()
+	local keyInput = KeyTextBox.Text
+
+	if keyInput == "" then
+		createNotification("Please enter a key first!", "warning", 3)
+		shakeUI()
+		return
+	end
+	createNotification("Validating your key...", "info", 2)
+	CheckKey(keyInput)
+end)
 
 CloseButton.MouseButton1Click:Connect(function()
 	closeUI()
@@ -801,20 +827,19 @@ PopupBackground.MouseButton1Click:Connect(function()
 end)
 
 LootlabsButton.MouseButton1Click:Connect(function()
-		
-	if setclipboard then
-		createNotification("Lockr.so link copied to clipboard!", "info", 3)
-		setclipboard("https://ads.luarmor.net/get_key?for=Pathos-xcIbIqoNOart")
-	else
-		createNotification("Could not set clipboard! copy from textbox", "info", 3)
-		KeyTextBox.Text = "https://shorturl.at/VNAFX"
-	end
+		createNotification("Lootlabs is disabled", "info", 3)
+	-- if setclipboard then
+	-- 	createNotification("Linkvertise link copied to clipboard!", "info", 3)
+	-- 	setclipboard("https://ads.luarmor.net/get_key?for=Pathos_Free_Key-vhIOirmPRogC")
+	-- else
+	-- 	createNotification("Could not set clipboard! copy from textbox", "info", 3)
+	-- 	KeyTextBox.Text = "https://shorturl.at/rjtzR"
+	-- end
 
 	closePopup()
 end)
 
 LinkvertiseButton.MouseButton1Click:Connect(function()
-	--createNotification("Linkvertise is disabled", "info", 3)
 	if setclipboard then
 		createNotification("Linkvertise link copied to clipboard!", "info", 3)
 		setclipboard("https://ads.luarmor.net/get_key?for=Pathos_FIAS_Linkvertise-aietlPpLMrMu")
@@ -823,18 +848,6 @@ LinkvertiseButton.MouseButton1Click:Connect(function()
 		KeyTextBox.Text = "https://shorturl.at/aPcwd"
 	end
 	closePopup()
-end)
-
-CheckKeyButton.MouseButton1Click:Connect(function()
-	local keyInput = KeyTextBox.Text
-
-	if keyInput == "" then
-		createNotification("Please enter a key first!", "warning", 3)
-		shakeUI()
-		return
-	end
-	createNotification("Validating your key...", "info", 2)
-	CheckKey(keyInput)
 end)
 
 DiscordSupportButton.MouseButton1Click:Connect(function()
