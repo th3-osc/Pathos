@@ -66,9 +66,7 @@ script_key = script_key or ( isfile(KeyFile) and readfile(KeyFile) ) or nil
 
 if script_key then
 	local status = API.check_key(script_key) do
-		if status.code == "KEY_VALID" then
-			CheckKey(script_key)
-		else
+		if status.code ~= "KEY_VALID" then
 			script_key = nil
 			
 			if isfile(KeyFile) then
