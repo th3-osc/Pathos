@@ -39,9 +39,42 @@ if not KeyName then
 	error("Game not supported by Pathos.")
 end
 
--- makefolder("Pathos/Keys")
--- local KeyFile = "Pathos/Keys/" .. KeyName
--- script_key = script_key or ( isfile(KeyFile) and readfile(KeyFile) ) or nil
+local function CheckKey(key)
+	local script_key = script_key or key
+	local status = API.check_key(script_key) do
+		if status.code == "KEY_VALID" then
+			script_key = script_key;
+			writefile("Pathos/Keys/" .. KeyName, script_key)
+			closeUI()
+			API.load_script()
+		elseif status.code:find("KEY_") then
+			local messages = {
+				KEY_HWID_LOCKED = "Key linked to a different HWID. Please reset it using our bot",
+				KEY_INCORRECT = "Key is incorrect",
+				KEY_INVALID = "Key is invalid",
+			}
+			createNotification("Key Failure: " .. (messages[status.code] or "Unknown error"), "info", 3)
+		else
+			game:GetService("Players").LocalPlayer:Kick("Key Failure: " .. status.message .. " Code: " .. status.code)
+		end
+	end
+end
+
+makefolder("Pathos/Keys")
+local KeyFile = "Pathos/Keys/" .. KeyName
+script_key = script_key or ( isfile(KeyFile) and readfile(KeyFile) ) or nil
+
+if script_key then
+	local status = API.check_key(script_key) do
+		if status.code == "KEY_VALID" then
+			script_key = nil
+			
+			if isfile(KeyFile) then
+				delfile(KeyFile)
+			end
+		end
+	end
+end
 
 local DARK_RED_ACCENT = Color3.fromRGB(120, 20, 20)
 
@@ -777,26 +810,7 @@ local function closeUI()
 	end)
 end
 
-local function CheckKey(Key)
-	script_key = Key or script_key
-	local status = API.check_key(script_key) do
-		if status.code == "KEY_VALID" then
-			script_key = script_key;
-			writefile("Pathos/Keys/" .. KeyName, script_key)
-			closeUI()
-			API.load_script()
-		elseif status.code:find("KEY_") then
-			local messages = {
-				KEY_HWID_LOCKED = "Key linked to a different HWID. Please reset it using our bot",
-				KEY_INCORRECT = "Key is incorrect",
-				KEY_INVALID = "Key is invalid",
-			}
-			createNotification("Key Failure: " .. (messages[status.code] or "Unknown error"), "info", 3)
-		else
-			game:GetService("Players").LocalPlayer:Kick("Key Failure: " .. status.message .. " Code: " .. status.code)
-		end
-	end
-end
+
 
 CheckKeyButton.MouseButton1Click:Connect(function()
 	local keyInput = KeyTextBox.Text
