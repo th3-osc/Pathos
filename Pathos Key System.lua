@@ -67,7 +67,7 @@ script_key = script_key or ( isfile(KeyFile) and readfile(KeyFile) ) or nil
 if script_key then
 	local status = API.check_key(script_key) do
 		if status.code == "KEY_VALID" then
-			CheckKey(script_key)
+			CheckKey()
 		else
 			script_key = nil
 			
@@ -912,7 +912,3 @@ game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(State)
         queue_on_teleport("<script to execute after TP>")
     end
 end)
-
-if script_key then
-	CheckKey()
-end
