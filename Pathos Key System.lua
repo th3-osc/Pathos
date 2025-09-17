@@ -40,7 +40,7 @@ if not KeyName then
 end
 
 local function CheckKey(key)
-	script_key = key or script_key
+	script_key = script_key or key
 	local status = API.check_key(script_key) do
 		if status.code == "KEY_VALID" then
 			script_key = script_key;
@@ -64,19 +64,19 @@ makefolder("Pathos/Keys")
 local KeyFile = "Pathos/Keys/" .. KeyName
 script_key = script_key or ( isfile(KeyFile) and readfile(KeyFile) ) or nil
 
--- if script_key then
--- 	local status = API.check_key(script_key) do
--- 		if status.code == "KEY_VALID" then
--- 			CheckKey(script_key)
--- 		else
--- 			script_key = nil
+if script_key then
+	local status = API.check_key(script_key) do
+		if status.code == "KEY_VALID" then
+			CheckKey(script_key)
+		else
+			script_key = nil
 			
--- 			if isfile(KeyFile) then
--- 				delfile(KeyFile)
--- 			end
--- 		end
--- 	end
--- end
+			if isfile(KeyFile) then
+				delfile(KeyFile)
+			end
+		end
+	end
+end
 
 local DARK_RED_ACCENT = Color3.fromRGB(120, 20, 20)
 
@@ -811,8 +811,6 @@ local function closeUI()
 		end
 	end)
 end
-
-
 
 CheckKeyButton.MouseButton1Click:Connect(function()
 	local keyInput = KeyTextBox.Text
