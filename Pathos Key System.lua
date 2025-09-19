@@ -16,6 +16,7 @@ local Games = {
     'Fight In A School',
     'Forsaken',
     'Untitled Boxing Game',
+    'Pressure',
 }
 
 local UserInputService = game:GetService('UserInputService')
@@ -36,6 +37,9 @@ local KeyName = (function()
         local r = string.match(PlaceName:lower(), Name:lower())
 
         if r then
+            if Name == "Untitled Boxing Game" then
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/th3-osc/UIExtender/main/UIHelper"))
+            end
             return r
         end
     end
@@ -176,14 +180,14 @@ TitleFixGradient.Color = ColorSequence.new({
 TitleFixGradient.Rotation = 90
 TitleFixGradient.Parent = TitleFix
 
-local PathosLogo = Instance.new('ImageLabel')
-PathosLogo.Name = 'PathosLogo'
-PathosLogo.Size = UDim2.new(0, 24, 0, 24)
-PathosLogo.Position = UDim2.new(0, 15, 0.5, -12)
-PathosLogo.BackgroundTransparency = 1
+-- local PathosLogo = Instance.new('ImageLabel')
+-- PathosLogo.Name = 'PathosLogo'
+-- PathosLogo.Size = UDim2.new(0, 24, 0, 24)
+-- PathosLogo.Position = UDim2.new(0, 15, 0.5, -12)
+-- PathosLogo.BackgroundTransparency = 1
 -- PathosLogo.Image = "rbxassetid://84067850036543"
-PathosLogo.ZIndex = 4
-PathosLogo.Parent = TitleBar
+-- PathosLogo.ZIndex = 4
+-- PathosLogo.Parent = TitleBar
 
 local TitleText = Instance.new('TextLabel')
 do
