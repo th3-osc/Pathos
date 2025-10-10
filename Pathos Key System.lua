@@ -11,7 +11,8 @@ local Games = {
     'Forsaken',
     'Untitled Boxing Game',
     'Pressure',
-    "South London"
+    "South London",
+    "Hypershot"
 }
 
 local UserInputService = game:GetService('UserInputService')
