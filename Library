@@ -1095,7 +1095,7 @@ end
 
 local ScreenGui = New("ScreenGui", {
     Name = "Obsidian",
-    DisplayOrder = 999,
+    DisplayOrder = 9999,
     ResetOnSpawn = false,
 })
 ParentUI(ScreenGui)
