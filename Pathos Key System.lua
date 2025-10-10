@@ -1,14 +1,114 @@
+freeme
+static01223
+Playing Roblox
+
+davis — 10:09 AM
+via a bot dm
+you can cloud play fornite
+freeme — 10:27 AM
+dang
+have  u started
+on the loader
+davis — 10:27 AM
+ill fix it rn
+freeme — 10:27 AM
+@davis and can u test using the original loader
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/1bd55929c9d4b1547c5d6a6f2085b8c5.lua"))()
+i tested 
+davis — 10:28 AM
+ok
+freeme — 10:28 AM
+already but just to make sure
+davis — 10:28 AM
+i will do that
+seriously is sad that ethos has to DETECT THE FUCKING UI instead of fixing the actual exploits
+thats so sad tbh
+davis — 10:46 AM
+im almsost done
+freeme — 10:55 AM
+look what i did to the server
+davis — 10:58 AM
+omg
+our opp
+just saying i made our loader 100x more sexy
+how do you know its him
+freeme — 11:00 AM
+beacuse u can click on him
+and see
+im in the fias dc
+davis — 11:00 AM
+oh
+he has dev role?
+freeme — 11:01 AM
+yes
+davis — 11:01 AM
+im guessing he just didnt wanna pay for a key so executed the loader and detected that
+idk if ethos needed to hire a dev to detected glow
+but ykw money well spent
+freeme — 11:01 AM
+how
+the script is coming back up in a day
+davis — 11:02 AM
+verbal irony
+freeme — 11:02 AM
+oh..
+i think its a ac dev not sure
+im going to check hidden devs
+davis — 11:03 AM
+Image
+im redoing loader
+but this is the background
+freeme — 11:03 AM
+what ui 
+davis — 11:03 AM
+i think it looks fire
+freeme — 11:03 AM
+is that
+davis — 11:03 AM
+https://forgenet.gitbook.io/fluent-documentation/documentation/documentation/fluent
+Fluent | Fluent GUI
+Fluent | Fluent GUI
+freeme — 11:03 AM
+ui library
+its mid
+background
+davis — 11:03 AM
+nah
+wait till i add the stuff to it
+freeme — 11:04 AM
+ye ill wait but the background currently is indeed not fire
+davis — 11:06 AM
+halfway tempted to webscrape this guys info online and figure out who he is irl
+but also thats kinda fucked up hes just doing his job
+freeme — 11:08 AM
+taking a nap
+davis — 12:35 PM
+omg i dont have github access
 repeat
     task.wait()
 until game:IsLoaded()
 
 if PathosLoader then
-    local BlurEffect = game:GetService('Lighting'):FindFirstChild('PathosBlur')
-    do
-        if BlurEffect then
-            BlurEffect:Destroy()
-        end
-    end
+    PathosLoader:Destroy()
+Expand
+message.txt
+35 KB
+here
+i added future proofing in
+u y=o-==9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+davis
+.davis.
+boring
+ 
+ 
+Owner Of Pathos.cc
+Automation Is Key :brainless: 
+pretty please for the love of god dont dm me i beg :1_blocked_message:
+repeat
+    task.wait()
+until game:IsLoaded()
+
+if PathosLoader then
     PathosLoader:Destroy()
 end
 
@@ -56,22 +156,39 @@ script_key = script_key or (isfile(KeyFile) and readfile(KeyFile)) or nil
 
 local DARK_RED_ACCENT = Color3.fromRGB(120, 20, 20)
 
+local function generateRandomUIName()
+    local invisibleChars = {
+        '\u{200B}',
+        '\u{200C}',
+        '\u{200D}',
+        '\u{2060}',
+        '\u{FEFF}',
+    }
+    
+    local randomName = ""
+    for i = 1, math.random(8, 15) do
+        randomName = randomName .. invisibleChars[math.random(1, #invisibleChars)]
+    end
+    
+    local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    for i = 1, math.random(5, 10) do
+        local pos = math.random(1, #randomName)
+        local char = chars:sub(math.random(1, #chars), math.random(1, #chars))
+        randomName = randomName:sub(1, pos) .. char .. randomName:sub(pos + 1)
+    end
+    
+    return randomName
+end
+
 getgenv().PathosLoader = Instance.new('ScreenGui')
 do
-    PathosLoader.Name = 'PathosLoaderPremium'
+    PathosLoader.Name = generateRandomUIName()
     PathosLoader.ResetOnSpawn = false
     PathosLoader.IgnoreGuiInset = true
     PathosLoader.ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets
     PathosLoader.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     PathosLoader.DisplayOrder = 999
     PathosLoader.Parent = game:GetService('CoreGui')
-end
-
-local BlurEffect = Instance.new('BlurEffect')
-do
-    BlurEffect.Name = 'PathosBlur'
-    BlurEffect.Size = 24
-    BlurEffect.Parent = game:GetService('Lighting')
 end
 
 local BackgroundFrame = Instance.new('Frame')
@@ -180,15 +297,6 @@ TitleFixGradient.Color = ColorSequence.new({
 })
 TitleFixGradient.Rotation = 90
 TitleFixGradient.Parent = TitleFix
-
--- local PathosLogo = Instance.new('ImageLabel')
--- PathosLogo.Name = 'PathosLogo'
--- PathosLogo.Size = UDim2.new(0, 24, 0, 24)
--- PathosLogo.Position = UDim2.new(0, 15, 0.5, -12)
--- PathosLogo.BackgroundTransparency = 1
--- PathosLogo.Image = "rbxassetid://84067850036543"
--- PathosLogo.ZIndex = 4
--- PathosLogo.Parent = TitleBar
 
 local TitleText = Instance.new('TextLabel')
 do
@@ -872,21 +980,16 @@ local function closeUI()
         BackgroundTransparency = 1,
     }, 0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In)
 
-    local blurTween = CreateTween(BlurEffect, { Size = 0 }, 0.4)
     local backgroundTween =
         CreateTween(BackgroundFrame, { BackgroundTransparency = 1 }, 0.4)
 
     closeTween:Play()
     glowTween:Play()
-    blurTween:Play()
     backgroundTween:Play()
 
     closeTween.Completed:Connect(function()
         if PathosLoader and PathosLoader.Parent then
             PathosLoader:Destroy()
-        end
-        if BlurEffect and BlurEffect.Parent then
-            BlurEffect:Destroy()
         end
     end)
 end
@@ -1060,3 +1163,5 @@ if script_key then
         end
     end
 end
+message.txt
+35 KB
