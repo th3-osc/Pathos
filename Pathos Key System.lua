@@ -47,7 +47,7 @@ end
 
 makefolder('Pathos/Keys')
 local KeyFile = 'Pathos/Keys/' .. KeyName
-script_key = script_key or (isfile(KeyFile) and readfile(KeyFile)) or nil
+local file_key = script_key or (isfile(KeyFile) and readfile(KeyFile)) or nil
 
 local DARK_RED_ACCENT = Color3.fromRGB(120, 20, 20)
 
@@ -1044,13 +1044,13 @@ game:GetService('Players').LocalPlayer.OnTeleport:Connect(function(State)
     end
 end)
 
-if script_key then
-    local status = API.check_key(script_key)
+if file_key then
+    local status = API.check_key(file_key)
     do
         if status.code == 'KEY_VALID' then
-            KeyTextBox.Text = tostring(script_key)
+            KeyTextBox.Text = tostring(file_key)
         else
-            script_key = nil
+            file_key = nil
 
             if isfile(KeyFile) then
                 delfile(KeyFile)
