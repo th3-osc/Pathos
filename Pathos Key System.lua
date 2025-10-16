@@ -1048,7 +1048,7 @@ if script_key then
     local status = API.check_key(script_key)
     do
         if status.code == 'KEY_VALID' then
-            CheckKey()
+            KeyTextBox.Text = tostring(script_key)
         else
             script_key = nil
 
