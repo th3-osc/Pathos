@@ -930,7 +930,6 @@ CheckKeyButton.MouseButton1Click:Connect(function()
         return
     end
     createNotification('Validating your key...', 'info', 2)
-    print('Calling check key')
     CheckKey(keyInput)
 end)
 
