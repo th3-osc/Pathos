@@ -7,7 +7,7 @@ if PathosLoader then
 end
 
 local Games = {
-    -- 'Fight In A School',
+    'Fight In A School',
     'Forsaken',
     'Untitled Boxing Game',
     'Pressure',
