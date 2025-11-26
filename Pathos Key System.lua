@@ -9,7 +9,13 @@ end
 local Games = {
     'Fight In A School',
     'Forsaken',
-    -- 'Untitled Boxing Game',
+    'Untitled Boxing Game',
+    'OW_Ronograd',
+    'PVP_Office',
+    'PVP_NYC',
+    'PVP_Favela',
+    'PVP_Coast',
+    'PVP_Tokyo',
     'Pressure',
     "South London",
     "Hypershot"
