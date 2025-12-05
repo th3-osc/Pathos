@@ -9,7 +9,7 @@ end
 local Games = {
     'Fight In A School',
     'Forsaken',
-    'Sniper Duels'
+    'Sniper Duels',
     'Untitled Boxing Game',
     'OW_Ronograd',
     'PVP_Office',
