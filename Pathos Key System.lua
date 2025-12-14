@@ -50,7 +50,7 @@ local KeyName = (function()
 end)()
 
 if not KeyName then
-    error('Game not supported by Pathos.')
+    print('GAME NOT SUPPORTED.')
 end
 
 makefolder('Pathos/Keys')
