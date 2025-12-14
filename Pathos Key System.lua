@@ -13,6 +13,7 @@ local Games = {
     'Untitled Boxing Game',
     'OW_Ronograd',
     'PVP_Office',
+    'Rivals',
     'PVP_NYC',
     'PVP_Favela',
     'PVP_Coast',
