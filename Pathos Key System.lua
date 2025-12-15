@@ -19,6 +19,8 @@ local CONFIG = {
     }
 }
 
+local UNCONFIGURED_PLACE_ID = 000000
+
 local GAMES = {
     ["Fight In A School"] = {
         placeName = "Fight In A School",
