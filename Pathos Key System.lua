@@ -47,11 +47,11 @@ local GAMES = {
         patterns = { "hadal blacksite", "pressure" },
     },
 
-    -- ["Untitled Boxing Game"] = {
-    --     placeName = "Untitled Boxing Game",
-    --     placeIds = { UNCONFIGURED_PLACE_ID },
-    --     patterns = { "untitled boxing game", "ubg" },
-    -- },
+    ["Untitled Boxing Game"] = {
+        placeName = "Untitled Boxing Game",
+        placeIds = { UNCONFIGURED_PLACE_ID },
+        patterns = { "untitled boxing game", "ubg" },
+    },
 
     ["South London"] = {
         placeName = "South London",
