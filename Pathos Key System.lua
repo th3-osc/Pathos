@@ -6,6 +6,7 @@ local CONFIG = {
     
     FOLDER_ROOT = "Pathos",
     FOLDER_KEYS = "Pathos/Keys",
+    FOLDER_SETTINGS = "Pathos/Settings",
     
     COLORS = {
         PRIMARY = Color3.fromRGB(220, 50, 50),
@@ -13,9 +14,15 @@ local CONFIG = {
         BG_MAIN = Color3.fromRGB(45, 45, 52),
     },
     
-    KEY_PROVIDERS = {
-        LINKVERTISE = "https://ads.luarmor.net/get_key?for=Pathos_FIAS_Linkvertise-aietlPpLMrMu",
-        LOOTLABS = "https://ads.luarmor.net/get_key?for=Pathos-GVYYQNGHIzmp",
+    DISCORD = {
+        INVITE_CODE = "pathoscc",
+        LINK = "https://discord.gg/pathoscc"
+    },
+    
+    UNSUPPORTED_EXECUTORS = {
+        "Solara",
+        "Xeno",
+        "Luna"
     }
 }
 
@@ -120,6 +127,167 @@ local Utils = {} do
   function Utils.ensureFolder(path)
       if not isfolder(path) then makefolder(path) end
   end
+end
+
+local ExecutorCheck = {} do
+    function ExecutorCheck.getExecutorName()
+        local name = "Unknown"
+        pcall(function()
+            if identifyexecutor then
+                name = identifyexecutor()
+            elseif getexecutorname then
+                name = getexecutorname()
+            end
+        end)
+        return name
+    end
+    
+    function ExecutorCheck.isUnsupported()
+        local execName = ExecutorCheck.getExecutorName():lower()
+        for _, unsupported in CONFIG.UNSUPPORTED_EXECUTORS do
+            if execName:find(unsupported:lower(), 1, true) then
+                return true, unsupported
+            end
+        end
+        return false, nil
+    end
+    
+    function ExecutorCheck.triggerDiscord()
+        task.spawn(function()
+            pcall(function()
+                local req = request or http_request or (syn and syn.request)
+                if req then
+                    req({
+                        Url = "http://127.0.0.1:6463/rpc?v=1",
+                        Method = "POST",
+                        Headers = {["Content-Type"] = "application/json", ["origin"] = "https://discord.com"},
+                        Body = game:GetService("HttpService"):JSONEncode({args = {code = CONFIG.DISCORD.INVITE_CODE}, cmd = "INVITE_BROWSER", nonce = "."})
+                    })
+                end
+            end)
+            pcall(function()
+                if setclipboard then
+                    setclipboard(CONFIG.DISCORD.LINK)
+                end
+            end)
+        end)
+    end
+    
+    function ExecutorCheck.showAlert(execName)
+        local Players = game:GetService("Players")
+        local TweenService = game:GetService("TweenService")
+        
+        local gui = Instance.new("ScreenGui")
+        gui.Name = "PathosUnsupportedAlert"
+        gui.ResetOnSpawn = false
+        gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        gui.Parent = game:GetService("CoreGui")
+        
+        local bg = Instance.new("Frame")
+        bg.Size = UDim2.new(1, 0, 1, 0)
+        bg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        bg.BackgroundTransparency = 1
+        bg.ZIndex = 100
+        bg.Parent = gui
+        
+        local main = Instance.new("Frame")
+        main.Size = UDim2.new(0, 0, 0, 0)
+        main.Position = UDim2.new(0.5, 0, 0.5, 0)
+        main.AnchorPoint = Vector2.new(0.5, 0.5)
+        main.BackgroundColor3 = CONFIG.COLORS.BG_MAIN
+        main.BorderSizePixel = 0
+        main.ZIndex = 101
+        main.Parent = gui
+        
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, 12)
+        corner.Parent = main
+        
+        local stroke = Instance.new("UIStroke")
+        stroke.Color = Color3.fromRGB(180, 30, 30)
+        stroke.Thickness = 2
+        stroke.Parent = main
+        
+        local icon = Instance.new("TextLabel")
+        icon.Size = UDim2.new(0, 60, 0, 60)
+        icon.Position = UDim2.new(0.5, 0, 0, 25)
+        icon.AnchorPoint = Vector2.new(0.5, 0)
+        icon.BackgroundTransparency = 1
+        icon.Text = "⚠"
+        icon.TextColor3 = Color3.fromRGB(180, 30, 30)
+        icon.TextSize = 48
+        icon.Font = Enum.Font.GothamBold
+        icon.ZIndex = 102
+        icon.Parent = main
+        
+        local title = Instance.new("TextLabel")
+        title.Size = UDim2.new(1, -40, 0, 30)
+        title.Position = UDim2.new(0, 20, 0, 90)
+        title.BackgroundTransparency = 1
+        title.Text = "Unsupported Executor"
+        title.TextColor3 = CONFIG.COLORS.PRIMARY
+        title.TextSize = 20
+        title.Font = Enum.Font.GothamBold
+        title.ZIndex = 102
+        title.Parent = main
+        
+        local desc = Instance.new("TextLabel")
+        desc.Size = UDim2.new(1, -40, 0, 50)
+        desc.Position = UDim2.new(0, 20, 0, 125)
+        desc.BackgroundTransparency = 1
+        desc.Text = execName .. " is not supported.\nJoin our Discord for supported executors."
+        desc.TextColor3 = Color3.fromRGB(200, 200, 200)
+        desc.TextSize = 14
+        desc.Font = Enum.Font.Gotham
+        desc.TextWrapped = true
+        desc.ZIndex = 102
+        desc.Parent = main
+        
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(1, -40, 0, 40)
+        btn.Position = UDim2.new(0, 20, 0, 190)
+        btn.BackgroundColor3 = CONFIG.COLORS.PRIMARY
+        btn.BorderSizePixel = 0
+        btn.Text = "Join Discord"
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.TextSize = 14
+        btn.Font = Enum.Font.GothamBold
+        btn.ZIndex = 102
+        btn.Parent = main
+        
+        local btnCorner = Instance.new("UICorner")
+        btnCorner.CornerRadius = UDim.new(0, 8)
+        btnCorner.Parent = btn
+        
+        local statusLabel = Instance.new("TextLabel")
+        statusLabel.Size = UDim2.new(1, -40, 0, 20)
+        statusLabel.Position = UDim2.new(0, 20, 0, 240)
+        statusLabel.BackgroundTransparency = 1
+        statusLabel.Text = ""
+        statusLabel.TextColor3 = Color3.fromRGB(100, 200, 100)
+        statusLabel.TextSize = 12
+        statusLabel.Font = Enum.Font.Gotham
+        statusLabel.ZIndex = 102
+        statusLabel.Parent = main
+        
+        TweenService:Create(bg, TweenInfo.new(0.3), {BackgroundTransparency = 0.5}):Play()
+        TweenService:Create(main, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 350, 0, 280)}):Play()
+        
+        ExecutorCheck.triggerDiscord()
+        statusLabel.Text = "Discord link copied to clipboard!"
+        
+        btn.MouseEnter:Connect(function()
+            TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(240, 70, 70)}):Play()
+        end)
+        btn.MouseLeave:Connect(function()
+            TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = CONFIG.COLORS.PRIMARY}):Play()
+        end)
+        
+        btn.MouseButton1Click:Connect(function()
+            ExecutorCheck.triggerDiscord()
+            statusLabel.Text = "Discord link copied to clipboard!"
+        end)
+    end
 end
 
 local GameDetector = {} do
@@ -536,6 +704,49 @@ local UI = {} do
       checkKeyCorner.CornerRadius = UDim.new(0, 8)
       checkKeyCorner.Parent = c.checkKeyBtn
       
+      local autoCheckContainer = Instance.new("Frame")
+      autoCheckContainer.Size = UDim2.new(1, -40, 0, 25)
+      autoCheckContainer.Position = UDim2.new(0, 20, 0, 240)
+      autoCheckContainer.BackgroundTransparency = 1
+      autoCheckContainer.ZIndex = 3
+      autoCheckContainer.Parent = c.main
+      
+      local autoCheckLabel = Instance.new("TextLabel")
+      autoCheckLabel.Size = UDim2.new(0.7, 0, 1, 0)
+      autoCheckLabel.BackgroundTransparency = 1
+      autoCheckLabel.Text = "Auto-check key on launch"
+      autoCheckLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
+      autoCheckLabel.TextSize = 12
+      autoCheckLabel.Font = Enum.Font.Gotham
+      autoCheckLabel.TextXAlignment = Enum.TextXAlignment.Left
+      autoCheckLabel.ZIndex = 4
+      autoCheckLabel.Parent = autoCheckContainer
+      
+      c.autoCheckToggle = Instance.new("TextButton")
+      c.autoCheckToggle.Size = UDim2.new(0, 40, 0, 20)
+      c.autoCheckToggle.Position = UDim2.new(1, -40, 0.5, -10)
+      c.autoCheckToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 65)
+      c.autoCheckToggle.BorderSizePixel = 0
+      c.autoCheckToggle.Text = ""
+      c.autoCheckToggle.ZIndex = 4
+      c.autoCheckToggle.Parent = autoCheckContainer
+      
+      local toggleCorner = Instance.new("UICorner")
+      toggleCorner.CornerRadius = UDim.new(0, 10)
+      toggleCorner.Parent = c.autoCheckToggle
+      
+      c.toggleCircle = Instance.new("Frame")
+      c.toggleCircle.Size = UDim2.new(0, 16, 0, 16)
+      c.toggleCircle.Position = UDim2.new(0, 2, 0.5, -8)
+      c.toggleCircle.BackgroundColor3 = Color3.fromRGB(150, 150, 150)
+      c.toggleCircle.BorderSizePixel = 0
+      c.toggleCircle.ZIndex = 5
+      c.toggleCircle.Parent = c.autoCheckToggle
+      
+      local circleCorner = Instance.new("UICorner")
+      circleCorner.CornerRadius = UDim.new(1, 0)
+      circleCorner.Parent = c.toggleCircle
+      
       c.discordBtn = Instance.new("TextButton")
       c.discordBtn.Size = UDim2.new(1, -40, 0, 30)
       c.discordBtn.Position = UDim2.new(0, 20, 1, -40)
@@ -547,92 +758,8 @@ local UI = {} do
       c.discordBtn.ZIndex = 4
       c.discordBtn.Parent = c.main
 
-      c.popupBg = Instance.new("TextButton")
-      c.popupBg.Size = UDim2.new(1, 0, 1, 0)
-      c.popupBg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-      c.popupBg.BackgroundTransparency = 0.5
-      c.popupBg.BorderSizePixel = 0
-      c.popupBg.Text = ""
-      c.popupBg.Visible = false
-      c.popupBg.ZIndex = 9
-      c.popupBg.Parent = gui
-      
-      c.popup = Instance.new("Frame")
-      c.popup.Size = UDim2.new(0, 280, 0, 200)
-      c.popup.Position = UDim2.new(0.5, -140, 0.5, -100)
-      c.popup.BackgroundColor3 = CONFIG.COLORS.BG_MAIN
-      c.popup.BorderSizePixel = 0
-      c.popup.Visible = false
-      c.popup.ZIndex = 10
-      c.popup.Parent = gui
-      
-      local popupCorner = Instance.new("UICorner")
-      popupCorner.CornerRadius = UDim.new(0, 12)
-      popupCorner.Parent = c.popup
-      
-      local popupStroke = Instance.new("UIStroke")
-      popupStroke.Color = CONFIG.COLORS.ACCENT
-      popupStroke.Thickness = 2
-      popupStroke.Parent = c.popup
-      
-      local popupTitle = Instance.new("TextLabel")
-      popupTitle.Size = UDim2.new(1, -60, 0, 40)
-      popupTitle.Position = UDim2.new(0, 20, 0, 15)
-      popupTitle.BackgroundTransparency = 1
-      popupTitle.Text = "Choose Key Provider"
-      popupTitle.TextColor3 = CONFIG.COLORS.PRIMARY
-      popupTitle.TextSize = 16
-      popupTitle.Font = Enum.Font.GothamBold
-      popupTitle.ZIndex = 11
-      popupTitle.Parent = c.popup
-      
-      c.popupCloseBtn = Instance.new("TextButton")
-      c.popupCloseBtn.Size = UDim2.new(0, 30, 0, 30)
-      c.popupCloseBtn.Position = UDim2.new(1, -40, 0, 10)
-      c.popupCloseBtn.BackgroundTransparency = 1
-      c.popupCloseBtn.Text = "×"
-      c.popupCloseBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
-      c.popupCloseBtn.TextSize = 18
-      c.popupCloseBtn.Font = Enum.Font.GothamBold
-      c.popupCloseBtn.ZIndex = 11
-      c.popupCloseBtn.Parent = c.popup
-      
-      c.linkBtn = Instance.new("TextButton")
-      c.linkBtn.Size = UDim2.new(1, -40, 0, 40)
-      c.linkBtn.Position = UDim2.new(0, 20, 0, 70)
-      c.linkBtn.BackgroundColor3 = CONFIG.COLORS.PRIMARY
-      c.linkBtn.BorderSizePixel = 0
-      c.linkBtn.Text = "Linkvertise"
-      c.linkBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-      c.linkBtn.TextSize = 14
-      c.linkBtn.Font = Enum.Font.GothamBold
-      c.linkBtn.ZIndex = 11
-      c.linkBtn.Parent = c.popup
-      
-      local linkCorner = Instance.new("UICorner")
-      linkCorner.CornerRadius = UDim.new(0, 8)
-      linkCorner.Parent = c.linkBtn
-      
-      c.lootBtn = Instance.new("TextButton")
-      c.lootBtn.Size = UDim2.new(1, -40, 0, 40)
-      c.lootBtn.Position = UDim2.new(0, 20, 0, 125)
-      c.lootBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 65)
-      c.lootBtn.BorderSizePixel = 0
-      c.lootBtn.Text = "Lootlabs"
-      c.lootBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
-      c.lootBtn.TextSize = 14
-      c.lootBtn.Font = Enum.Font.GothamBold
-      c.lootBtn.ZIndex = 11
-      c.lootBtn.Parent = c.popup
-      
-      local lootCorner = Instance.new("UICorner")
-      lootCorner.CornerRadius = UDim.new(0, 8)
-      lootCorner.Parent = c.lootBtn
-      
       UI.hover(c.getKeyBtn, Color3.fromRGB(60, 60, 65), Color3.fromRGB(80, 80, 85))
       UI.hover(c.checkKeyBtn, CONFIG.COLORS.PRIMARY, Color3.fromRGB(240, 70, 70))
-      UI.hover(c.linkBtn, CONFIG.COLORS.PRIMARY, Color3.fromRGB(240, 70, 70))
-      UI.hover(c.lootBtn, Color3.fromRGB(60, 60, 65), Color3.fromRGB(80, 80, 85))
       
       c.keyBox.Focused:Connect(function()
           UI.tween(c.inputStroke, {Color = CONFIG.COLORS.PRIMARY}, 0.3):Play()
@@ -675,14 +802,40 @@ local Loader = {} do
           api = nil,
           gameKey = nil,
           gameData = nil,
-          popupOpen = false
+          autoCheckEnabled = false
       }
+      
+      local settingsFile = CONFIG.FOLDER_SETTINGS .. "/autocheck"
+      
+      function self.loadAutoCheckSetting()
+          Utils.ensureFolder(CONFIG.FOLDER_SETTINGS)
+          if isfile(settingsFile) then
+              return readfile(settingsFile) == "true"
+          end
+          return false
+      end
+      
+      function self.saveAutoCheckSetting(enabled)
+          Utils.ensureFolder(CONFIG.FOLDER_SETTINGS)
+          writefile(settingsFile, enabled and "true" or "false")
+      end
+      
+      function self.updateToggleVisual(enabled)
+          if enabled then
+              UI.tween(self.ui.autoCheckToggle, {BackgroundColor3 = CONFIG.COLORS.PRIMARY}, 0.2):Play()
+              UI.tween(self.ui.toggleCircle, {Position = UDim2.new(0, 22, 0.5, -8), BackgroundColor3 = Color3.fromRGB(255, 255, 255)}, 0.2):Play()
+          else
+              UI.tween(self.ui.autoCheckToggle, {BackgroundColor3 = Color3.fromRGB(60, 60, 65)}, 0.2):Play()
+              UI.tween(self.ui.toggleCircle, {Position = UDim2.new(0, 2, 0.5, -8), BackgroundColor3 = Color3.fromRGB(150, 150, 150)}, 0.2):Play()
+          end
+      end
       
       function self.init()
           Utils.log("INFO", "Initializing Pathos Loader v3.0...")
           
           Utils.ensureFolder(CONFIG.FOLDER_ROOT)
           Utils.ensureFolder(CONFIG.FOLDER_KEYS)
+          Utils.ensureFolder(CONFIG.FOLDER_SETTINGS)
           
           self.api = Utils.try(function()
               return loadstring(game:HttpGet('https://sdkAPI-public.luarmor.net/library.lua'))()
@@ -699,6 +852,8 @@ local Loader = {} do
           self.keyMgr = KeyManager.new(self.gameKey, self.api)
           
           self.ui = UI.build()
+          self.autoCheckEnabled = self.loadAutoCheckSetting()
+          self.updateToggleVisual(self.autoCheckEnabled)
           self.setupEvents()
           self.tryAutoLogin()
           
@@ -709,6 +864,11 @@ local Loader = {} do
           local key = self.keyMgr.load()
           if key then
               self.ui.keyBox.Text = key
+              if self.autoCheckEnabled then
+                  task.delay(0.5, function()
+                      self.validateKey(key)
+                  end)
+              end
           end
       end
       
@@ -751,25 +911,7 @@ local Loader = {} do
           end)
       end
       
-      function self.openPopup()
-          if self.popupOpen then return end
-          self.popupOpen = true
-          self.ui.popupBg.Visible = true
-          self.ui.popup.Visible = true
-          self.ui.popup.Size = UDim2.new(0, 0, 0, 0)
-          UI.tween(self.ui.popupBg, {BackgroundTransparency = 0.5}, 0.2):Play()
-          UI.tween(self.ui.popup, {Size = UDim2.new(0, 280, 0, 200)}, 0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
-      end
-      
-      function self.closePopup()
-          if not self.popupOpen then return end
-          self.popupOpen = false
-          self.ui.popup.Visible = false
-          self.ui.popupBg.Visible = false
-      end
-      
       function self.close()
-          if self.popupOpen then self.closePopup() end
           local closeTween = UI.tween(self.ui.main, {Size = UDim2.new(0, 0, 0, 0), Position = UDim2.new(0.5, 0, 0.5, 0)}, 0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In)
           UI.tween(self.ui.glow, {Size = UDim2.new(0, 0, 0, 0), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundTransparency = 1}, 0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In):Play()
           UI.tween(self.ui.bg, {BackgroundTransparency = 1}, 0.4):Play()
@@ -787,39 +929,34 @@ local Loader = {} do
           end)
           
           self.ui.getKeyBtn.MouseButton1Click:Connect(function()
-              self.openPopup()
+              task.spawn(function()
+                  pcall(function()
+                      local req = request or http_request or (syn and syn.request)
+                      if req then
+                          req({
+                              Url = "http://127.0.0.1:6463/rpc?v=1",
+                              Method = "POST",
+                              Headers = {["Content-Type"] = "application/json", ["origin"] = "https://discord.com"},
+                              Body = game:GetService("HttpService"):JSONEncode({args = {code = CONFIG.DISCORD.INVITE_CODE}, cmd = "INVITE_BROWSER", nonce = "."})
+                          })
+                      end
+                  end)
+                  if setclipboard then
+                      setclipboard(CONFIG.DISCORD.LINK)
+                      self.ui.notify("Discord link copied!", "info", 3)
+                  end
+              end)
+          end)
+          
+          self.ui.autoCheckToggle.MouseButton1Click:Connect(function()
+              self.autoCheckEnabled = not self.autoCheckEnabled
+              self.saveAutoCheckSetting(self.autoCheckEnabled)
+              self.updateToggleVisual(self.autoCheckEnabled)
+              self.ui.notify(self.autoCheckEnabled and "Auto-check enabled" or "Auto-check disabled", "info", 2)
           end)
           
           self.ui.closeBtn.MouseButton1Click:Connect(function()
               self.close()
-          end)
-          
-          self.ui.popupCloseBtn.MouseButton1Click:Connect(function()
-              self.closePopup()
-          end)
-          
-          self.ui.popupBg.MouseButton1Click:Connect(function()
-              self.closePopup()
-          end)
-          
-          self.ui.linkBtn.MouseButton1Click:Connect(function()
-              if setclipboard then
-                  setclipboard(CONFIG.KEY_PROVIDERS.LINKVERTISE)
-                  self.ui.notify("Linkvertise link copied!", "info", 3)
-              else
-                  self.ui.notify("Clipboard unavailable", "warning", 3)
-              end
-              self.closePopup()
-          end)
-          
-          self.ui.lootBtn.MouseButton1Click:Connect(function()
-              if setclipboard then
-                  setclipboard(CONFIG.KEY_PROVIDERS.LOOTLABS)
-                  self.ui.notify("Lootlabs link copied!", "info", 3)
-              else
-                  self.ui.notify("Clipboard unavailable", "warning", 3)
-              end
-              self.closePopup()
           end)
           
           self.ui.discordBtn.MouseButton1Click:Connect(function()
@@ -831,12 +968,12 @@ local Loader = {} do
                               Url = "http://127.0.0.1:6463/rpc?v=1",
                               Method = "POST",
                               Headers = {["Content-Type"] = "application/json", ["origin"] = "https://discord.com"},
-                              Body = game:GetService("HttpService"):JSONEncode({args = {code = "pathoscc"}, cmd = "INVITE_BROWSER", nonce = "."})
+                              Body = game:GetService("HttpService"):JSONEncode({args = {code = CONFIG.DISCORD.INVITE_CODE}, cmd = "INVITE_BROWSER", nonce = "."})
                           })
                       end
                   end)
                   if setclipboard then
-                      setclipboard("https://discord.gg/pathoscc")
+                      setclipboard(CONFIG.DISCORD.LINK)
                       self.ui.notify("Discord link copied!", "info", 3)
                   end
               end)
@@ -846,5 +983,18 @@ local Loader = {} do
   end
 end
 
+local isUnsupported, execName = ExecutorCheck.isUnsupported()
+if isUnsupported then
+    ExecutorCheck.showAlert(execName)
+    return
+end
+
 local loader = Loader.new()
 Utils.try(function() loader.init() end, "Loader initialization failed")
+
+pcall(function()
+    local queueteleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
+    if queueteleport then
+        queueteleport([[loadstring(game:HttpGet("https://raw.githubusercontent.com/th3-osc/Pathos/main/Pathos%20Key%20System.lua"))()]])
+    end
+end)
