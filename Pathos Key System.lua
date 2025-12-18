@@ -20,7 +20,7 @@ local CONFIG = {
     },
     
     KEY_PROVIDERS = {
-        LINKVERTISE = "https://ads.luarmor.net/get_key?for=Pathos_FIAS_Linkvertise-aietlPpLMrMu"
+        LINKVERTISE = "https://ads.luarmor.net/get_key?for=Pathos-HqyRBSscucst"
     },
     
     UNSUPPORTED_EXECUTORS = {
