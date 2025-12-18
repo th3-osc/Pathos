@@ -19,6 +19,10 @@ local CONFIG = {
         LINK = "https://discord.gg/pathoscc"
     },
     
+    KEY_PROVIDERS = {
+        LINKVERTISE = "https://ads.luarmor.net/get_key?for=Pathos_FIAS_Linkvertise-aietlPpLMrMu"
+    },
+    
     UNSUPPORTED_EXECUTORS = {
         "Solara",
         "Xeno",
@@ -47,11 +51,11 @@ local GAMES = {
         patterns = { "hadal blacksite", "pressure" },
     },
 
-    ["Untitled Boxing Game"] = {
-        placeName = "Untitled Boxing Game",
-        placeIds = { UNCONFIGURED_PLACE_ID },
-        patterns = { "untitled boxing game", "ubg" },
-    },
+    -- ["Untitled Boxing Game"] = {
+    --     placeName = "Untitled Boxing Game",
+    --     placeIds = { UNCONFIGURED_PLACE_ID },
+    --     patterns = { "untitled boxing game", "ubg" },
+    -- },
 
     ["South London"] = {
         placeName = "South London",
@@ -929,23 +933,12 @@ local Loader = {} do
           end)
           
           self.ui.getKeyBtn.MouseButton1Click:Connect(function()
-              task.spawn(function()
-                  pcall(function()
-                      local req = request or http_request or (syn and syn.request)
-                      if req then
-                          req({
-                              Url = "http://127.0.0.1:6463/rpc?v=1",
-                              Method = "POST",
-                              Headers = {["Content-Type"] = "application/json", ["origin"] = "https://discord.com"},
-                              Body = game:GetService("HttpService"):JSONEncode({args = {code = CONFIG.DISCORD.INVITE_CODE}, cmd = "INVITE_BROWSER", nonce = "."})
-                          })
-                      end
-                  end)
-                  if setclipboard then
-                      setclipboard(CONFIG.DISCORD.LINK)
-                      self.ui.notify("Discord link copied!", "info", 3)
-                  end
-              end)
+              if setclipboard then
+                  setclipboard(CONFIG.KEY_PROVIDERS.LINKVERTISE)
+                  self.ui.notify("Linkvertise link copied!", "info", 3)
+              else
+                  self.ui.notify("Clipboard unavailable", "warning", 3)
+              end
           end)
           
           self.ui.autoCheckToggle.MouseButton1Click:Connect(function()
