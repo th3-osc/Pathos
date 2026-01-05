@@ -25,7 +25,7 @@ local CONFIG = {
     
     UNSUPPORTED_EXECUTORS = {
         "Solara",
-        "Xeno",
+        -- "Xeno",
         "Luna"
     }
 }
