@@ -8,4 +8,4 @@ pcall(function()
         if setclipboard then setclipboard("https://discord.gg/XYsTvuudeU") end
     end)
 
-warn("join new discord")
+warn("this script is no longer maintained by me (freeme) for my new project join the discord for fias completly free keyless")
