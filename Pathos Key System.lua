@@ -2,7 +2,7 @@ repeat task.wait() until game:IsLoaded()
 
 local CONFIG = {
     API_SCRIPT_ID = "30b156d1b5322e48d977bdb219bf4053",
-    API_URL = "https://api.luarmor.net/files/v3/loaders/...",
+    API_URL = "https://api.luarmor.net/files/v4/loaders/...",
     
     FOLDER_ROOT = "Pathos",
     FOLDER_KEYS = "Pathos/Keys",
