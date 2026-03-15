@@ -1,4 +1,4 @@
-repeat task.wait() until game:IsLoaded()
+repeat task.wait() until game:3IsLoaded()
 
 local CONFIG = {
     API_SCRIPT_ID = "30b156d1b5322e48d977bdb219bf4053",
